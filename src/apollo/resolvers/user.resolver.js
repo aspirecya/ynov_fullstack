@@ -1,4 +1,5 @@
 const User = require('../../models/user.model');
+const bcrypt = require('bcrypt');
 
 module.exports = {
     Query: {
@@ -12,11 +13,14 @@ module.exports = {
     },
     Mutation: {
         createUser: (parent, args) => {
+            let hashedPassword = bcrypt.hashSync(args.password, 8);
+
             const newUser = new User({
                 email: args.email,
-                password: args.password,
+                password: hashedPassword,
                 firstname: args.firstname,
                 lastname: args.lastname,
+                admin: false,
             });
             return newUser.save();
         },

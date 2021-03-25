@@ -37,13 +37,7 @@ exports.register = (req, res, err) => {
             );
             res.send({
                 auth: true,
-                user: {
-                    _id: user._id,
-                    email: user.email,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    token: userToken
-                }
+                token: userToken
             });
         })
         .catch(err => {
@@ -69,28 +63,25 @@ exports.login = (req, res, err) => {
         .then(user => {
             if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
                 return res.status(401).send({
-                    error: "The information entered are incorrect."
+                    type: "error",
+                    message: "The information entered are incorrect."
                 });
             }
+
             let userToken = jwt.sign(
                 {
-                    id: user.email,
-                    admin: user.admin
+                    id: user._id,
+                    admin: user.admin,
                 },
                 jwtConfig.secret,
                 {
-                    expiresIn: 86400
+                    expiresIn: 86400,
                 }
-            )
+            );
+
             res.send({
                 auth: true,
-                user: {
-                    _id: user._id,
-                    email: user.email,
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    token: userToken
-                }
+                token: userToken
             });
         })
         .catch(err => {
