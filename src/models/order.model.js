@@ -5,10 +5,15 @@ const orderSchema = new Schema({
         user: {
             type: Schema.Types.ObjectId, ref: 'User'
         },
-        totalPrice: Number,
         products: [{
             type: Schema.Types.ObjectId, ref: 'Product'
-        }]
+        }],
+        totalPrice: {
+            type: Number,
+        },
+        status: {
+            type: String,
+        }
     },
     { timestamps: true }
 );

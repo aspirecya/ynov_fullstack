@@ -20,6 +20,12 @@ const userSchema = new Schema({
         lastname: {
             type: String
         },
+        phone: {
+            type: String,
+        },
+        address: {
+            type: String,
+        },
         admin: {
             type: Boolean
         },

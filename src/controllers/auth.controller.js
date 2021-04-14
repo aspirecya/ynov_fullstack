@@ -19,6 +19,8 @@ exports.register = (req, res, err) => {
         password: hashedPassword,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
+        address: req.body.address,
+        phone: req.body.phone,
         admin: false,
     });
 
@@ -27,7 +29,7 @@ exports.register = (req, res, err) => {
             console.log("[DEBUG] User " + req.body.email + " has registered.");
             let userToken = jwt.sign(
                 {
-                    id: user.email,
+                    id: user._id,
                     admin: user.admin
                 },
                 jwtConfig.secret,
@@ -37,7 +39,9 @@ exports.register = (req, res, err) => {
             );
             res.send({
                 auth: true,
-                token: userToken
+                token: userToken,
+                type: "success",
+                message: "User successfully registered."
             });
         })
         .catch(err => {

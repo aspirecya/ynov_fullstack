@@ -3,9 +3,9 @@ const {gql} = require('apollo-server-express');
 module.exports = gql`
     type Order {
         id: ID!
-        user: User,
-        totalPrice: Float,
+        user: User
         products: [Product]
+        totalPrice: Float
     }
     extend type Query {
         orders: [Order]

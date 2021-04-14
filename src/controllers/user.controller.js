@@ -5,7 +5,6 @@ const userValidationSchema = require("../utils/validators/user.validation");
 exports.create = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
 
-    console.log(validation);
     if (validation.error) {
         return res.status(400).send(validation.error);
     }
@@ -17,6 +16,8 @@ exports.create = (req, res, err) => {
         password: hashedPassword,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
+        address: req.body.address,
+        phone: req.body.phone,
         admin: false,
     });
 
@@ -58,7 +59,7 @@ exports.findById = (req, res) => {
 exports.findByIdAndUpdate = (req, res) => {
     if(req.body.password) req.body.password = bcrypt.hashSync(req.body.password, 8);
 
-    User.findByIdAndUpdate(req.params.id, req.body)
+    User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(user => {
         res.send(user)
     })
