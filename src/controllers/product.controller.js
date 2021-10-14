@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 exports.create = (req, res, err) => {
     const product = new Product({
+        seller:req.body.seller,
         title: req.body.title,
         description: req.body.description,
         price: req.body.price,
