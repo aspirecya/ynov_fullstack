@@ -87,3 +87,15 @@ exports.getAllCategories = (req, res) => {
             })
         })
 };
+
+exports.getProductBuyer = (req, res) => {
+    Product.findById(_id = req.params.id)
+        .then(product => {
+            res.send(product.buyer)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the product."
+            })
+        })
+}
