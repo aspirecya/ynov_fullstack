@@ -11,5 +11,6 @@ router.get('/products/', verifyAuth, product.findAll);
 router.get('/product/:id', verifyAuth, product.findById);
 router.patch('/product/:id', verifyAuth, product.findByIdAndUpdate);
 router.delete('/product/:id', verifyAuth, product.findByIdAndRemove);
+router.get('/products/categories', verifyAuth, product.getAllCategories);
 
 module.exports = router;

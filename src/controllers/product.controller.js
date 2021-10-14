@@ -68,3 +68,22 @@ exports.findByIdAndRemove = (req, res) => {
             })
         })
 };
+
+exports.getAllCategories = (req, res) => {
+    let categories = [];
+    Product.find()
+        .then(products => {
+            products.forEach(product => {
+                product.categories.forEach(category => {
+                    categories.push(category);
+                })
+            })
+
+            res.send(categories);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message
+            })
+        })
+};
