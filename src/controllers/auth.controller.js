@@ -7,7 +7,6 @@ const userValidationSchema = require("../utils/validators/user.validation");
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
 
-    console.log(validation);
     if (validation.error) {
         return res.status(400).send(validation.error);
     }
@@ -79,13 +78,14 @@ exports.login = (req, res, err) => {
                 },
                 jwtConfig.secret,
                 {
-                    expiresIn: 86400,
+                    expiresIn: process.env.JWT_EXPIRATION,
                 }
             );
 
             res.send({
                 auth: true,
-                token: userToken
+                token: userToken,
+                expiration: process.env.JWT_EXPIRATION
             });
         })
         .catch(err => {
