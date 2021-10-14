@@ -62,6 +62,9 @@ exports.getUserById = (req, res) => {
 };
 
 exports.login = (req, res, err) => {
+    let date = new Date();
+    date.setSeconds(process.env.JWT_EXPIRATION);
+
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
@@ -85,6 +88,7 @@ exports.login = (req, res, err) => {
             res.send({
                 auth: true,
                 token: userToken,
+                expiration: date
             });
         })
         .catch(err => {
