@@ -62,8 +62,6 @@ exports.getUserById = (req, res) => {
 };
 
 exports.login = (req, res, err) => {
-    let date = new Date();
-
     User.findOne({ email: req.body.email })
         .then(user => {
             if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
