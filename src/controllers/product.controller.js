@@ -36,7 +36,7 @@ exports.create = (req, res, err) => {
 };
 
 exports.findAll = (req, res) => {
-    Product.find()
+    Product.find({ isActive: true })
         .then(products => {
             res.send(products);
         })
