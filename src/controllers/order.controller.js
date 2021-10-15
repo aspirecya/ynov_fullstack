@@ -20,6 +20,7 @@ exports.create = async (req, res, err) => {
         .then(order => {
             order.populate('product', function (err) {
                 order.price = order.product.price;
+                order.product.isActive = false;
                 order.save();
 
                 res.send(order);
