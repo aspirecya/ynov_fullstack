@@ -3,38 +3,36 @@ const jwt = require('jsonwebtoken');
 const Product = require('../models/product.model');
 
 exports.create = (req, res, err) => {
-    let token = req.headers['x-access-token'];
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
 
-    jwt.verify(token, jwtConfig.secret, function(err, decoded) {
-        if(!decoded.id) {
-            return res.status(400).send({
-                added: false,
-                message: "The login token is expired or invalid."
-            })
-        }
+    if(!user) {
+        return res.status(400).send({
+            added: false,
+            message: "The login token is expired or invalid."
+        })
+    }
 
-        const product = new Product({
-            seller: decoded.id,
-            buyers: [],
-            title: req.body.title,
-            description: req.body.description,
-            color: req.body.color,
-            size: req.body.size,
-            price: req.body.price,
-            categories: req.body.categories,
-            image: req.body.image,
-        });
-
-        product.save()
-            .then(data => {
-                res.send(data);
-            })
-            .catch(err => {
-                res.status(500).send({
-                    message: err.message
-                })
-            })
+    const product = new Product({
+        seller: user,
+        buyers: [],
+        title: req.body.title,
+        description: req.body.description,
+        color: req.body.color,
+        size: req.body.size,
+        price: req.body.price,
+        categories: req.body.categories,
+        image: req.body.image,
     });
+
+    product.save()
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message
+            })
+        })
 };
 
 exports.findAll = (req, res) => {
@@ -105,24 +103,22 @@ exports.getAllCategories = (req, res) => {
 };
 
 exports.getUserProducts = (req, res) => {
-    let token = req.headers['x-access-token'];
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
 
-    jwt.verify(token, jwtConfig.secret, function(err, decoded) {
-        if(!decoded.id) {
-            return res.status(400).send({
-                added: false,
-                message: "The login token is expired or invalid."
-            })
-        }
+    if(!user) {
+        return res.status(400).send({
+            added: false,
+            message: "The login token is expired or invalid."
+        })
+    }
 
-        Product.find({ seller: decoded.id })
-            .then(products => {
-                res.send(products);
+    Product.find({ seller: user })
+        .then(products => {
+            res.send(products);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message
             })
-            .catch(err => {
-                res.status(500).send({
-                    message: err.message
-                })
-            })
-    });
+        })
 }
