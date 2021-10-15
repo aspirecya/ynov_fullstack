@@ -141,7 +141,7 @@ exports.addBuyerToProduct = (req, res) => {
 
     Product.findById(_id = req.params.id)
         .then(product => {
-            product.buyers.append(user);
+            product.buyers.push(user);
             product.save();
 
             res.send(product);
