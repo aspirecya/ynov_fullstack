@@ -6,7 +6,7 @@ const product = require('../controllers/product.controller');
 const verifyAuth = require('../utils/verifyAuth');
 const verifyPerm = require('../utils/verifyPerm');
 
-router.post('/products/', verifyAuth, product.create);
+router.post('/products/', product.create);
 router.get('/products/', product.findAll);
 router.get('/product/:id', product.findById);
 router.patch('/product/:id', verifyAuth, product.findByIdAndUpdate);

@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import jwtConfig from "../configs/jwt.config";
+const jwtConfig = require('../configs/jwt.config');
+const jwt = require('jsonwebtoken');
 const Product = require('../models/product.model');
 
 exports.create = (req, res, err) => {
