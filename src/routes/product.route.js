@@ -8,7 +8,8 @@ const verifyPerm = require('../utils/verifyPerm');
 
 router.post('/products/', product.create);
 router.get('/products/', product.findAll);
-router.get('/products/buyer/', product.getUserProducts);
+router.get('/products/seller/', product.getUserProducts);
+router.get('/products/:id/buyers/', product.getProductBuyers);
 router.get('/product/:id', product.findById);
 router.patch('/product/:id', verifyAuth, product.findByIdAndUpdate);
 router.delete('/product/:id', verifyAuth, product.findByIdAndRemove);

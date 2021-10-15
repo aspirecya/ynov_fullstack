@@ -122,3 +122,16 @@ exports.getUserProducts = (req, res) => {
             })
         })
 }
+
+exports.getProductBuyers = (req, res) => {
+    Product.findById(_id = req.params.id)
+        .populate('buyers')
+        .then(product => {
+            res.send(product.buyers);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the product's buyers."
+            })
+        })
+}
