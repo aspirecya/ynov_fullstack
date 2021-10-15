@@ -81,3 +81,17 @@ exports.findByIdAndRemove = (req, res) => {
         })
     })
 };
+
+exports.findWithToken = (req, res) => {
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+
+    User.findById(_id = user)
+        .then(user => {
+            res.send(user)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the user."
+            })
+        })
+}
