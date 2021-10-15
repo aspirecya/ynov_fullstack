@@ -29,6 +29,9 @@ const userSchema = new Schema({
         admin: {
             type: Boolean
         },
+        wishlist: [{
+            type: Schema.Types.ObjectId, ref: 'Product'
+        }]
     },
 
     { timestamps: true }

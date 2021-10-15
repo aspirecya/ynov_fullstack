@@ -104,14 +104,25 @@ exports.getAllCategories = (req, res) => {
         })
 };
 
-exports.getProductBuyer = (req, res) => {
-    Product.findById(_id = req.params.id)
-        .then(product => {
-            res.send(product.buyer)
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "An error has occurred while fetching the product."
+exports.getUserProducts = (req, res) => {
+    let token = req.headers['x-access-token'];
+
+    jwt.verify(token, jwtConfig.secret, function(err, decoded) {
+        if(!decoded.id) {
+            return res.status(400).send({
+                added: false,
+                message: "The login token is expired or invalid."
             })
-        })
+        }
+
+        Product.find({ seller: decoded.id })
+            .then(products => {
+                res.send(products);
+            })
+            .catch(err => {
+                res.status(500).send({
+                    message: err.message
+                })
+            })
+    });
 }
