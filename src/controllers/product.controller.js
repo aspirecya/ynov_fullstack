@@ -1,25 +1,33 @@
+import jwt from "jsonwebtoken";
 const Product = require('../models/product.model');
 const bcrypt = require('bcrypt');
 
 exports.create = (req, res, err) => {
-    const product = new Product({
-        seller:req.body.seller,
-        title: req.body.title,
-        description: req.body.description,
-        price: req.body.price,
-        categories: req.body.categories,
-        image: req.body.image
-    });
+    let token = req.headers['x-access-token'];
 
-    product.save()
-        .then(data => {
-            res.send(data);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message
+    jwt.verify(token, jwtConfig.secret, function(err, decoded) {
+        const product = new Product({
+            seller: decoded.id,
+            buyers: [],
+            title: req.body.title,
+            description: req.body.description,
+            color: req.body.color,
+            size: req.body.size,
+            price: req.body.price,
+            categories: req.body.categories,
+            image: req.body.image,
+        });
+
+        product.save()
+            .then(data => {
+                res.send(data);
             })
-        })
+            .catch(err => {
+                res.status(500).send({
+                    message: err.message
+                })
+            })
+    });
 };
 
 exports.findAll = (req, res) => {
