@@ -6,6 +6,13 @@ exports.create = (req, res, err) => {
     let token = req.headers['x-access-token'];
 
     jwt.verify(token, jwtConfig.secret, function(err, decoded) {
+        if(!decoded.id) {
+            return res.status(400).send({
+                added: false,
+                message: "The login token is expired or invalid."
+            })
+        }
+
         const product = new Product({
             seller: decoded.id,
             buyers: [],
