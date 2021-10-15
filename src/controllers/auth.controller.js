@@ -3,6 +3,7 @@ const jwtConfig = require('../configs/jwt.config');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userValidationSchema = require("../utils/validators/user.validation");
+const moment = require('moment');
 
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
@@ -62,8 +63,8 @@ exports.getUserById = (req, res) => {
 };
 
 exports.login = (req, res, err) => {
-    let date = new Date();
-    date.setSeconds(process.env.JWT_EXPIRATION);
+    let date = moment();
+    date.add(process.env.JWT_EXPIRATION.replace(/\D/g,''), process.env.JWT_EXPIRATION.replace(/\d/g,''));
 
     User.findOne({ email: req.body.email })
         .then(user => {

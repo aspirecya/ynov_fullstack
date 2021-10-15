@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
 const product = require('../controllers/product.controller');
-
 const verifyAuth = require('../utils/verifyAuth');
-const verifyPerm = require('../utils/verifyPerm');
+
 
 router.post('/products/', product.create);
 router.get('/products/', product.findAll);

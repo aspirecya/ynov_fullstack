@@ -1,31 +1,23 @@
-const stripe = require('stripe')(process.env.STRIPE_KEY);
+const jwt = require('jsonwebtoken');
+const jwtConfig = require('../configs/jwt.config');
 const Order = require('../models/order.model');
-const uuid = require('uuid');
-const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 exports.create = async (req, res, err) => {
-    const order = new Order({
-        user: req.body.user,
-        products: req.body.products,
-        totalPrice: req.body.totalPrice,
-        status: req.body.status
-    });
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+    let todayDate = moment();
 
-    // try {
-    //     await stripe.charges.create({
-    //         source: req.body.stripeToken,
-    //         currency: 'eur',
-    //         amount: req.body.totalPrice,
-    //         description: `Order ${new Date()} by ${req.body.user}`,
-    //     });
-    // } catch(err) {
-    //     console.log(err);
-    // }
+    const order = new Order({
+        seller: user,
+        buyer: req.body.buyer,
+        product: req.body.product,
+        totalPrice: req.body.price,
+        status: "En cours",
+        returnDate: todayDate.add('15', 'd')
+    });
 
     order.save()
         .then(data => {
-            order.status = "processed";
-            order.save();
             res.send(data);
         })
         .catch(err => {
@@ -37,8 +29,9 @@ exports.create = async (req, res, err) => {
 
 exports.findAll = (req, res) => {
     Order.find()
-        .populate('user')
-        .populate('products')
+        .populate('seller')
+        .populate('buyer')
+        .populate('product')
         .then(orders => {
             res.send(orders);
         })
@@ -49,23 +42,11 @@ exports.findAll = (req, res) => {
         })
 };
 
-exports.findByUserId = (req, res) => {
-    Order.find({ user: req.params.id })
-        .populate('products')
-        .then(order => {
-            res.send(order)
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "An error has occurred while fetching the order."
-            })
-        })
-};
-
 exports.findById = (req, res) => {
     Order.findById(_id = req.params.id)
-        .populate('products')
-        .populate('user')
+        .populate('seller')
+        .populate('buyer')
+        .populate('product')
         .then(order => {
             res.send(order)
         })
@@ -78,8 +59,6 @@ exports.findById = (req, res) => {
 
 exports.findByIdAndUpdate = (req, res) => {
     Order.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .populate('products')
-        .populate('user')
         .then(order => {
             res.send(order)
         })
@@ -98,6 +77,36 @@ exports.findByIdAndRemove = (req, res) => {
         .catch(err => {
             res.status(500).send({
                 message: err.message || "An error has occurred while deleting the order."
+            })
+        })
+};
+
+exports.findBySellerId = (req, res) => {
+    Order.find({ seller: req.params.id })
+        .populate('seller')
+        .populate('buyer')
+        .populate('product')
+        .then(orders => {
+            res.send(orders)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the order."
+            })
+        })
+};
+
+exports.findByBuyerId = (req, res) => {
+    Order.find({ buyer: req.params.id })
+        .populate('seller')
+        .populate('buyer')
+        .populate('product')
+        .then(orders => {
+            res.send(orders)
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the order."
             })
         })
 };

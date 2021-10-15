@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
 const user = require('../controllers/user.controller');
-
 const verifyAuth = require('../utils/verifyAuth');
-const verifyPerm = require('../utils/verifyPerm');
+
 
 router.post('/users/', user.create);
 router.get('/users/', verifyAuth, user.findAll);
