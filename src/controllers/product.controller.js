@@ -135,3 +135,20 @@ exports.getProductBuyers = (req, res) => {
             })
         })
 }
+
+exports.addBuyerToProduct = (req, res) => {
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+
+    Product.findById(_id = req.params.id)
+        .then(product => {
+            product.buyers.append(user);
+            product.save();
+
+            res.send(product);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message || "An error has occurred while fetching the product's buyers."
+            })
+        })
+}

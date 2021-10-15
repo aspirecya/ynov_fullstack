@@ -21,6 +21,8 @@ exports.create = async (req, res, err) => {
             order.populate('product', function (err) {
                 order.price = order.product.price;
                 order.product.isActive = false;
+
+                order.product.save();
                 order.save();
 
                 res.send(order);
