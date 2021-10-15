@@ -11,14 +11,19 @@ exports.create = async (req, res, err) => {
         seller: user,
         buyer: req.body.buyer,
         product: req.body.product,
-        totalPrice: req.body.price,
         status: "En cours",
         returnDate: todayDate.add('15', 'd')
     });
+    console.log(await order.populate('product'));
 
     order.save()
-        .then(data => {
-            res.send(data);
+        .then(order => {
+            order.populate('product', function (err) {
+                order.price = order.product.price;
+                order.save();
+
+                res.send(order);
+            });
         })
         .catch(err => {
             res.status(500).send({
