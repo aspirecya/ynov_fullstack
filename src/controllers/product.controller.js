@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
+import jwtConfig from "../configs/jwt.config";
 const Product = require('../models/product.model');
-const bcrypt = require('bcrypt');
 
 exports.create = (req, res, err) => {
     let token = req.headers['x-access-token'];
