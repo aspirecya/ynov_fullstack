@@ -14,7 +14,6 @@ exports.create = async (req, res, err) => {
         status: "En cours",
         returnDate: todayDate.add('15', 'd')
     });
-    console.log(await order.populate('product'));
 
     order.save()
         .then(order => {
@@ -25,12 +24,17 @@ exports.create = async (req, res, err) => {
                 order.product.save();
                 order.save();
 
-                res.send(order);
+                res.status(200).send({
+                    success: true,
+                    message: "The buyer has been confirmed."
+                });
             });
         })
         .catch(err => {
+            console.log("[ORDER CREATE ERROR]", err);
             res.status(500).send({
-                message: err.message
+                success: false,
+                message: "An error occurred while selecting the buyer."
             })
         })
 };
@@ -40,12 +44,17 @@ exports.findAll = (req, res) => {
         .populate('seller')
         .populate('buyer')
         .populate('product')
-        .then(orders => {
-            res.send(orders);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Orders have been fetched."
+            });
         })
         .catch(err => {
+            console.log("[ORDER FETCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching all orders."
+                success: false,
+                message: "An error has occurred while fetching all orders."
             })
         })
 };
@@ -55,36 +64,51 @@ exports.findById = (req, res) => {
         .populate('seller')
         .populate('buyer')
         .populate('product')
-        .then(order => {
-            res.send(order)
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Order has been fetched."
+            });
         })
         .catch(err => {
+            console.log("[ORDER FETCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the order."
+                success: false,
+                message: "An error has occurred while fetching the order."
             })
         })
 };
 
 exports.findByIdAndUpdate = (req, res) => {
     Order.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(order => {
-            res.send(order)
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Order has been updated."
+            });
         })
         .catch(err => {
+            console.log("[ORDER UPDATE ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while updating the order."
+                success: false,
+                message: "An error has occurred while updating the order."
             })
         })
 };
 
 exports.findByIdAndRemove = (req, res) => {
     Order.findByIdAndDelete(req.params.id)
-        .then(order => {
-            res.send(order);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Order has been deleted."
+            });
         })
         .catch(err => {
+            console.log("[ORDER DELETE ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while deleting the order."
+                success: false,
+                message: "An error has occurred while deleting the order."
             })
         })
 };
@@ -95,11 +119,14 @@ exports.findBySellerId = (req, res) => {
         .populate('buyer')
         .populate('product')
         .then(orders => {
-            res.send(orders)
+            res.status(200).send({
+                success: true,
+            });
         })
         .catch(err => {
+            console.log("[ORDER FINDBYSELLERID ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the order."
+                success: false,
             })
         })
 };
@@ -110,11 +137,14 @@ exports.findByBuyerId = (req, res) => {
         .populate('buyer')
         .populate('product')
         .then(orders => {
-            res.send(orders)
+            res.status(200).send({
+                success: true,
+            });
         })
         .catch(err => {
+            console.log("[ORDER FINDBYBUYERID ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the order."
+                success: false,
             })
         })
 };

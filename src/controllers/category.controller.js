@@ -10,23 +10,33 @@ exports.create = (req, res, err) => {
 
     category.save()
         .then(category => {
-            res.send(category);
+            res.status(200).send({
+                success: true,
+                message: "Category has been created."
+            });
         })
         .catch(err => {
+            console.log("[CATEGORY CREATE ERROR]", err);
             res.status(500).send({
-                message: err.message
-            })
+                success: false,
+                message: "An error occurred while creating the category."
+            });
         })
 };
 
 exports.findAll = (req, res) => {
     Category.find()
-        .then(categories => {
-            res.send(categories);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Categories have been fetched."
+            });
         })
         .catch(err => {
+            console.log("[CATEGORY FETCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching all categories."
+                success: false,
+                message: "An error has occurred while fetching all categories."
             })
         })
 };
@@ -34,11 +44,16 @@ exports.findAll = (req, res) => {
 exports.findByIdAndUpdate = (req, res) => {
     Category.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then(category => {
-            res.send(category)
+            res.status(200).send({
+                success: true,
+                message: "Category have been updated."
+            });
         })
         .catch(err => {
+            console.log("[CATEGORY PATCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while updating the category."
+                success: false,
+                message: "An error has occurred while updating the category."
             })
         })
 };
@@ -46,11 +61,16 @@ exports.findByIdAndUpdate = (req, res) => {
 exports.findByIdAndRemove = (req, res) => {
     Category.findByIdAndDelete(req.params.id)
         .then(category => {
-            res.send(category);
+            res.status(200).send({
+                success: true,
+                message: "Category has been deleted."
+            });
         })
         .catch(err => {
+            console.log("[CATEGORY DELETE ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while deleting the category."
+                success: false,
+                message: "An error has occurred while deleting the category."
             })
         })
 };

@@ -25,60 +25,85 @@ exports.create = (req, res, err) => {
     });
 
     product.save()
-        .then(data => {
-            res.send(data);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Product has been created."
+            });
         })
         .catch(err => {
+            console.log("[PRODUCT CREATE ERROR]", err);
             res.status(500).send({
-                message: err.message
+                success: false,
+                message: "An error has occurred while creating the product."
             })
         })
 };
 
 exports.findAll = (req, res) => {
     Product.find({ isActive: true })
-        .then(products => {
-            res.send(products);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Products have been fetched."
+            });
         })
         .catch(err => {
+            console.log("[PRODUCT FETCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching all products."
+                success: false,
+                message: "An error has occurred while fetching all product."
             })
         })
 };
 
 exports.findById = (req, res) => {
     Product.findById(_id = req.params.id)
-        .then(product => {
-            res.send(product)
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Product has been fetched."
+            });
         })
         .catch(err => {
+            console.log("[PRODUCT FETCH ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the product."
+                success: false,
+                message: "An error has occurred while fetching the product."
             })
         })
 };
 
 exports.findByIdAndUpdate = (req, res) => {
     Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(product => {
-            res.send(product)
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Product has been updated."
+            });
         })
         .catch(err => {
+            console.log("[PRODUCT UPDATE ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while updating the product."
+                success: false,
+                message: "An error has occurred while updating the product."
             })
         })
 };
 
 exports.findByIdAndRemove = (req, res) => {
     Product.findByIdAndDelete(req.params.id)
-        .then(product => {
-            res.send(product);
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Product has been deleted."
+            });
         })
         .catch(err => {
+            console.log("[PRODUCT DELETE ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while deleting the product."
+                success: false,
+                message: "An error has occurred while deleting the product."
             })
         })
 };
@@ -108,6 +133,7 @@ exports.getUserProducts = (req, res) => {
     if(!user) {
         return res.status(400).send({
             added: false,
+            success: false,
             message: "The login token is expired or invalid."
         })
     }

@@ -89,7 +89,8 @@ exports.login = (req, res, err) => {
             res.send({
                 auth: true,
                 token: userToken,
-                expiration: date
+                expiration: date,
+                message: "User successfully logged in."
             });
         })
         .catch(err => {
