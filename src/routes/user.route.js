@@ -4,11 +4,10 @@ const user = require('../controllers/user.controller');
 const verifyAuth = require('../utils/verifyAuth');
 
 
-router.post('/users/', user.create);
-router.get('/users/', verifyAuth, user.findAll);
-router.get('/user/:id', verifyAuth, user.findById);
-router.patch('/user/:id', verifyAuth, user.findByIdAndUpdate);
+router.post('/users', user.create);
+router.get('/users', verifyAuth, user.findAll);
+router.get('/user', verifyAuth, user.findByToken);
+router.patch('/user', verifyAuth, user.findByTokenAndUpdate);
 router.delete('/user/:id', verifyAuth, user.findByIdAndRemove);
-router.get('/user/', user.findWithToken)
 
 module.exports = router;

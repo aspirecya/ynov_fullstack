@@ -46,8 +46,10 @@ exports.findAll = (req, res) => {
         })
 };
 
-exports.findById = (req, res) => {
-    User.findById(_id = req.params.id)
+exports.findByToken = (req, res) => {
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+
+    User.findById(_id = user)
         .then(user => {
             res.send(user)
         })
@@ -58,12 +60,18 @@ exports.findById = (req, res) => {
         })
 };
 
-exports.findByIdAndUpdate = (req, res) => {
+exports.findByTokenAndUpdate = (req, res) => {
+    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+
     if(req.body.password) req.body.password = bcrypt.hashSync(req.body.password, 8);
 
-    User.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    User.findByIdAndUpdate(user, req.body, { new: true })
     .then(user => {
-        res.send(user)
+        res.status(200).send({
+            success: true,
+            message: "Account has been updated.",
+            user: user
+        });
     })
     .catch(err => {
         res.status(500).send({
@@ -83,17 +91,3 @@ exports.findByIdAndRemove = (req, res) => {
         })
     })
 };
-
-exports.findWithToken = (req, res) => {
-    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
-
-    User.findById(_id = user)
-        .then(user => {
-            res.send(user)
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "An error has occurred while fetching the user."
-            })
-        })
-}
