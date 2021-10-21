@@ -12,7 +12,8 @@ exports.create = (req, res, err) => {
         .then(category => {
             res.status(200).send({
                 success: true,
-                message: "Category has been created."
+                message: "Category has been created.",
+                category: category
             });
         })
         .catch(err => {
@@ -29,7 +30,8 @@ exports.findAll = (req, res) => {
         .then(category => {
             res.status(200).send({
                 success: true,
-                message: "Categories have been fetched."
+                message: "Categories have been fetched.",
+                category: category
             });
         })
         .catch(err => {
@@ -46,7 +48,8 @@ exports.findByIdAndUpdate = (req, res) => {
         .then(category => {
             res.status(200).send({
                 success: true,
-                message: "Category have been updated."
+                message: "Category have been updated.",
+                category: category
             });
         })
         .catch(err => {
@@ -63,7 +66,8 @@ exports.findByIdAndRemove = (req, res) => {
         .then(category => {
             res.status(200).send({
                 success: true,
-                message: "Category has been deleted."
+                message: "Category has been deleted.",
+                category: category
             });
         })
         .catch(err => {

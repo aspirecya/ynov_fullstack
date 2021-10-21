@@ -25,10 +25,11 @@ exports.create = (req, res, err) => {
     });
 
     product.save()
-        .then(category => {
+        .then(product => {
             res.status(200).send({
                 success: true,
-                message: "Product has been created."
+                message: "Product has been created.",
+                product: product
             });
         })
         .catch(err => {
@@ -42,10 +43,11 @@ exports.create = (req, res, err) => {
 
 exports.findAll = (req, res) => {
     Product.find({ isActive: true })
-        .then(category => {
+        .then(product => {
             res.status(200).send({
                 success: true,
-                message: "Products have been fetched."
+                message: "Products have been fetched.",
+                product: product
             });
         })
         .catch(err => {
@@ -59,10 +61,11 @@ exports.findAll = (req, res) => {
 
 exports.findById = (req, res) => {
     Product.findById(_id = req.params.id)
-        .then(category => {
+        .then(product => {
             res.status(200).send({
                 success: true,
-                message: "Product has been fetched."
+                message: "Product has been fetched.",
+                product: product
             });
         })
         .catch(err => {
@@ -76,10 +79,11 @@ exports.findById = (req, res) => {
 
 exports.findByIdAndUpdate = (req, res) => {
     Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(category => {
+        .then(product => {
             res.status(200).send({
                 success: true,
-                message: "Product has been updated."
+                message: "Product has been updated.",
+                product: product
             });
         })
         .catch(err => {
@@ -93,10 +97,11 @@ exports.findByIdAndUpdate = (req, res) => {
 
 exports.findByIdAndRemove = (req, res) => {
     Product.findByIdAndDelete(req.params.id)
-        .then(category => {
+        .then(product => {
             res.status(200).send({
                 success: true,
-                message: "Product has been deleted."
+                message: "Product has been deleted.",
+                product: product
             });
         })
         .catch(err => {

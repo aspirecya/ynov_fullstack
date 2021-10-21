@@ -26,7 +26,8 @@ exports.create = async (req, res, err) => {
 
                 res.status(200).send({
                     success: true,
-                    message: "The buyer has been confirmed."
+                    message: "The buyer has been confirmed.",
+                    order: order
                 });
             });
         })
@@ -44,10 +45,11 @@ exports.findAll = (req, res) => {
         .populate('seller')
         .populate('buyer')
         .populate('product')
-        .then(category => {
+        .then(order => {
             res.status(200).send({
                 success: true,
-                message: "Orders have been fetched."
+                message: "Orders have been fetched.",
+                order: order
             });
         })
         .catch(err => {
@@ -64,10 +66,11 @@ exports.findById = (req, res) => {
         .populate('seller')
         .populate('buyer')
         .populate('product')
-        .then(category => {
+        .then(order => {
             res.status(200).send({
                 success: true,
-                message: "Order has been fetched."
+                message: "Order has been fetched.",
+                order: order
             });
         })
         .catch(err => {
@@ -81,10 +84,11 @@ exports.findById = (req, res) => {
 
 exports.findByIdAndUpdate = (req, res) => {
     Order.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        .then(category => {
+        .then(order => {
             res.status(200).send({
                 success: true,
-                message: "Order has been updated."
+                message: "Order has been updated.",
+                order: order
             });
         })
         .catch(err => {
@@ -98,10 +102,11 @@ exports.findByIdAndUpdate = (req, res) => {
 
 exports.findByIdAndRemove = (req, res) => {
     Order.findByIdAndDelete(req.params.id)
-        .then(category => {
+        .then(order => {
             res.status(200).send({
                 success: true,
-                message: "Order has been deleted."
+                message: "Order has been deleted.",
+                order: order
             });
         })
         .catch(err => {
@@ -121,6 +126,7 @@ exports.findBySellerId = (req, res) => {
         .then(orders => {
             res.status(200).send({
                 success: true,
+                orders: orders
             });
         })
         .catch(err => {
@@ -139,6 +145,7 @@ exports.findByBuyerId = (req, res) => {
         .then(orders => {
             res.status(200).send({
                 success: true,
+                orders: orders
             });
         })
         .catch(err => {
