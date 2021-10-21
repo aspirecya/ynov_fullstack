@@ -40,13 +40,14 @@ exports.register = (req, res, err) => {
             res.send({
                 auth: true,
                 token: userToken,
-                type: "success",
+                success: true,
                 message: "User successfully registered."
             });
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message
+                success: false,
+                message: "The information entered are incorrect."
             })
         })
 };
@@ -70,7 +71,7 @@ exports.login = (req, res, err) => {
         .then(user => {
             if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
                 return res.status(401).send({
-                    type: "error",
+                    success: false,
                     message: "The information entered are incorrect."
                 });
             }
@@ -90,6 +91,7 @@ exports.login = (req, res, err) => {
                 auth: true,
                 token: userToken,
                 expiration: date,
+                success: true,
                 message: "User successfully logged in."
             });
         })
