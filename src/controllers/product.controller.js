@@ -43,6 +43,7 @@ exports.create = (req, res, err) => {
 
 exports.findAll = (req, res) => {
     Product.find({ isActive: true })
+        .populate('category')
         .then(product => {
             res.status(200).send({
                 success: true,
@@ -61,6 +62,7 @@ exports.findAll = (req, res) => {
 
 exports.findById = (req, res) => {
     Product.findById(_id = req.params.id)
+        .populate('category')
         .then(product => {
             res.status(200).send({
                 success: true,
