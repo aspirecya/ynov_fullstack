@@ -20,7 +20,7 @@ exports.create = (req, res, err) => {
         color: req.body.color,
         size: req.body.size,
         price: req.body.price,
-        categories: req.body.categories,
+        category: req.body.category,
         image: req.body.image,
     });
 
