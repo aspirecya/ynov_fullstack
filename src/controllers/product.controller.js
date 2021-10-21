@@ -115,25 +115,6 @@ exports.findByIdAndRemove = (req, res) => {
         })
 };
 
-exports.getAllCategories = (req, res) => {
-    let categories = [];
-    Product.find()
-        .then(products => {
-            products.forEach(product => {
-                product.categories.forEach(category => {
-                    categories.push(category);
-                })
-            })
-
-            res.send(categories);
-        })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message
-            })
-        })
-};
-
 exports.getUserProducts = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
 
@@ -150,6 +131,7 @@ exports.getUserProducts = (req, res) => {
             res.send(products);
         })
         .catch(err => {
+            console.log("[PRODUCT GETUSERPRODUCTS ERROR]", err);
             res.status(500).send({
                 message: err.message
             })
@@ -163,6 +145,7 @@ exports.getProductBuyers = (req, res) => {
             res.send(product.buyers);
         })
         .catch(err => {
+            console.log("[PRODUCT GETPRODUCTBUYERS ERROR]", err);
             res.status(500).send({
                 message: err.message || "An error has occurred while fetching the product's buyers."
             })
@@ -180,6 +163,7 @@ exports.addBuyerToProduct = (req, res) => {
             res.send(product);
         })
         .catch(err => {
+            console.log("[PRODUCT ADDBUYERTOPRODUCT ERROR]", err);
             res.status(500).send({
                 message: err.message || "An error has occurred while fetching the product's buyers."
             })
@@ -194,6 +178,7 @@ exports.productHasBuyerId = (req, res) => {
             res.send(product.buyers.includes(user));
         })
         .catch(err => {
+            console.log("[PRODUCT PRODUCTHASBUYERID ERROR]", err);
             res.status(500).send({
                 message: err.message || "An error has occurred while fetching the product's buyers."
             })

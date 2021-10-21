@@ -13,6 +13,5 @@ router.get('/products/:id/buyer/contains', product.productHasBuyerId);
 router.get('/product/:id', product.findById);
 router.patch('/product/:id', verifyAuth, product.findByIdAndUpdate);
 router.delete('/product/:id', verifyAuth, product.findByIdAndRemove);
-router.get('/products/categories', product.getAllCategories);
 
 module.exports = router;

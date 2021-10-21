@@ -38,13 +38,13 @@ exports.register = (req, res, err) => {
                 }
             );
             res.send({
-                auth: true,
-                token: userToken,
                 success: true,
-                message: "User successfully registered."
+                message: "User successfully registered.",
+                token: userToken
             });
         })
         .catch(err => {
+            console.log("[AUTH REGISTER ERROR]", err);
             res.status(500).send({
                 success: false,
                 message: "The information entered are incorrect."
@@ -88,16 +88,17 @@ exports.login = (req, res, err) => {
             );
 
             res.send({
-                auth: true,
-                token: userToken,
-                expiration: date,
                 success: true,
-                message: "User successfully logged in."
+                message: "User successfully logged in.",
+                token: userToken,
+                expiration: date
             });
         })
         .catch(err => {
+            console.log("[AUTH LOGIN ERROR]", err);
             return res.status(500).send({
-                message: err || "An error occurred when logging in."
+                success: false,
+                message: "The information entered are incorrect."
             });
     });
 };
