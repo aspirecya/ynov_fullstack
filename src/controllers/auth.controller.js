@@ -9,6 +9,8 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
+    let date = moment();
+    date.add(process.env.JWT_EXPIRATION.replace(/\D/g,''), process.env.JWT_EXPIRATION.replace(/\d/g,''));
 
     if (validation.error) {
         return res.status(400).send(validation.error);
@@ -61,7 +63,8 @@ exports.register = (req, res, err) => {
             res.send({
                 success: true,
                 message: "User successfully registered.",
-                token: userToken
+                token: userToken,
+                expiration: date
             });
         })
         .catch(err => {
