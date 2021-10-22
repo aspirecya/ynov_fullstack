@@ -9,5 +9,6 @@ router.get('/users', verifyAuth, user.findAll);
 router.get('/user', verifyAuth, user.findByToken);
 router.patch('/user', verifyAuth, user.findByTokenAndUpdate);
 router.delete('/user/:id', verifyAuth, user.findByIdAndRemove);
+router.get('/user/isAdmin', user.isAdmin);
 
 module.exports = router;
