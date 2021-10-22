@@ -33,8 +33,8 @@ const userSchema = new Schema({
             type: Schema.Types.ObjectId, ref: 'Product'
         }],
         geocoding: {
-            latitude: { type: mongoose.Decimal128 },
-            longitude: { type: mongoose.Decimal128 },
+            latitude: mongoose.Decimal128,
+            longitude: mongoose.Decimal128
         },
     },
 
