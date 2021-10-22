@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userValidationSchema = require("../utils/validators/user.validation");
 const moment = require('moment');
+const {Client} = require("@googlemaps/google-maps-services-js");
+
 
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
@@ -23,6 +25,25 @@ exports.register = (req, res, err) => {
         phone: req.body.phone,
         admin: false,
     });
+
+    if(req.body.address) {
+        const client = new Client({});
+
+        client.geocode({
+            params: {
+                key: process.env.GOOGLE_MAP_KEY,
+                address: req.body.address,
+                region: 'fr',
+            }
+        })
+        .then((r) => {
+            user.geocoding.latitude = r.data.results[0].geometry.location.lat;
+            user.geocoding.longitude = r.data.results[0].geometry.location.lng;
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+    }
 
     user.save()
         .then(data => {

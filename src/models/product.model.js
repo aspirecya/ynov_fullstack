@@ -36,7 +36,11 @@ const productSchema = new Schema({
         type: Boolean,
         required: true,
         default: true,
-    }
+    },
+    geocoding: {
+        latitude: { type: mongoose.Decimal128 },
+        longitude: { type: mongoose.Decimal128 },
+    },
 },
     { timestamps: true }
 );

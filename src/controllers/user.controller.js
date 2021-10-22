@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const userValidationSchema = require("../utils/validators/user.validation");
 const jwtConfig = require('../configs/jwt.config');
 const jwt = require('jsonwebtoken');
+const {Client} = require("@googlemaps/google-maps-services-js");
 
 exports.create = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
@@ -62,11 +63,31 @@ exports.findByToken = (req, res) => {
 
 exports.findByTokenAndUpdate = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
-
     if(req.body.password) req.body.password = bcrypt.hashSync(req.body.password, 8);
 
     User.findByIdAndUpdate(user, req.body, { new: true })
     .then(user => {
+        if(req.body.address) {
+            const client = new Client({});
+
+            client.geocode({
+                params: {
+                    key: process.env.GOOGLE_MAP_KEY,
+                    address: req.body.address,
+                    region: 'fr',
+                }
+            })
+            .then((r) => {
+                user.geocoding.latitude = r.data.results[0].geometry.location.lat;
+                user.geocoding.longitude = r.data.results[0].geometry.location.lng;
+                user.save();
+                console.log(user);
+            })
+            .catch((e) => {
+                    console.log(e);
+            });
+        }
+
         res.status(200).send({
             success: true,
             message: "Account has been updated.",

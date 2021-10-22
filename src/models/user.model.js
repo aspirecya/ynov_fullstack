@@ -31,7 +31,11 @@ const userSchema = new Schema({
         },
         wishlist: [{
             type: Schema.Types.ObjectId, ref: 'Product'
-        }]
+        }],
+        geocoding: {
+            latitude: { type: mongoose.Decimal128 },
+            longitude: { type: mongoose.Decimal128 },
+        },
     },
 
     { timestamps: true }
