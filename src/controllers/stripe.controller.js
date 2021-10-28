@@ -20,6 +20,7 @@ exports.createPaymentIntent = async (req, res, err) => {
 
 exports.webhook = async (req, res, err) => {
     const sig = req.headers['stripe-signature'];
+    console.log('📄 LOG SIGNATURE', sig);
 
     let event;
 
