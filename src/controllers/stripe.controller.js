@@ -35,17 +35,11 @@ exports.webhook = async (req, res, err) => {
 
     // Handle the event
     switch (event.type) {
-        case 'payment_intent.created':
-            const paymentIntent = event.data.object;
-            // Then define and call a function to handle the event payment_intent.created
-            console.log(paymentIntent);
-            break;
         case 'payment_intent.succeeded':
             const paymentIntent = event.data.object;
             // Then define and call a function to handle the event payment_intent.succeeded
             console.log(paymentIntent);
             break;
-
         // ... handle other event types
         default:
             console.log(`Unhandled event type ${event.type}`);
