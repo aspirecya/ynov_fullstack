@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
-const moment = require('moment');
-const jwtConfig = require('../configs/jwt.config');
 const stripe = require('stripe')(process.env.STRIPE_KEY);
+const webhookSecret = process.env.STRIPE_WEBHOOK_KEY;
 
 exports.createPaymentIntent = async (req, res, err) => {
     const intent = await stripe.paymentIntents.create({
@@ -25,7 +23,7 @@ exports.webhook = async (req, res, err) => {
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_KEY);
+        event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
     } catch (err) {
         res.status(400).send(`❌ Webhook Error ❌: ${err.message}`);
         return;
