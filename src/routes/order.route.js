@@ -9,6 +9,7 @@ router.get('/orders/', verifyAuth, order.findAll);
 router.get('/order/:id', verifyAuth, order.findById);
 router.get('/orders/seller/:id', verifyAuth, order.findBySellerId);
 router.get('/orders/buyer/:id', verifyAuth, order.findByBuyerId);
+router.get('/order/product/:id', verifyAuth, order.findByProductId);
 router.patch('/order/:id', verifyAuth, order.findByIdAndUpdate);
 router.delete('/order/:id', verifyAuth, order.findByIdAndRemove);
 

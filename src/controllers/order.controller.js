@@ -155,3 +155,22 @@ exports.findByBuyerId = (req, res) => {
             })
         })
 };
+
+exports.findByProductId = (req, res) => {
+    Order.find({ product: req.params.id })
+        .populate('seller')
+        .populate('buyer')
+        .populate('product')
+        .then(order => {
+            res.status(200).send({
+                success: true,
+                order: order
+            });
+        })
+        .catch(err => {
+            console.log("[ORDER FINDBYPRODUCTID ERROR]", err);
+            res.status(500).send({
+                success: false,
+            })
+        })
+};
