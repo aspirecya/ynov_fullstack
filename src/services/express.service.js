@@ -23,7 +23,13 @@ graphQlServer.applyMiddleware({ app, path: "/graphql" });
 app.use(cors());
 
 // middleware init
-app.use(bodyParser.json());
+app.use((req, res, next) => {
+    if (req.originalUrl === '/webhook') {
+        next();
+    } else {
+        bodyParser.json()
+    }
+});
 
 // routes
 app.use('/api/v1', apiRouter);
