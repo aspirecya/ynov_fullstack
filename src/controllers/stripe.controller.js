@@ -19,25 +19,28 @@ exports.createPaymentIntent = async (req, res, err) => {
 };
 
 exports.webhook = async (req, res, err) => {
-    console.log(req, res, err);
     const sig = req.headers['stripe-signature'];
 
     let event;
 
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_KEY);
-        console.log(event);
     } catch (err) {
-        res.status(400).send(`Webhook Error: ${err.message}`);
+        res.status(400).send(`❌ Webhook Error ❌: ${err.message}`);
         return;
     }
 
     // Handle the event
     switch (event.type) {
+        case 'payment_intent.canceled':
+            const cancelled = event.data.object;
+            // Then define and call a function to handle the event payment_intent.canceled
+            console.log('❌ intent cancel', cancelled);
+            break;
         case 'payment_intent.succeeded':
-            const paymentIntent = event.data.object;
+            const succeeded = event.data.object;
             // Then define and call a function to handle the event payment_intent.succeeded
-            console.log(paymentIntent);
+            console.log('✅ intent success', succeeded);
             break;
         // ... handle other event types
         default:
