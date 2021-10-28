@@ -120,7 +120,15 @@ exports.findByIdAndRemove = (req, res) => {
 };
 
 exports.findBySellerId = (req, res) => {
-    Order.find({ seller: req.params.id })
+    let query = {
+        buyer: req.params.id
+    }
+
+    if(req.params.status) {
+        query.status = req.params.status;
+    }
+
+    Order.find(query)
         .populate('seller')
         .populate('buyer')
         .populate('product')
@@ -139,11 +147,21 @@ exports.findBySellerId = (req, res) => {
 };
 
 exports.findByBuyerId = (req, res) => {
-    Order.find({ buyer: req.params.id })
+    let query = {
+        buyer: req.params.id
+    }
+
+    if(req.params.status) {
+        query.status = req.params.status;
+    }
+
+    Order.find(query)
         .populate('seller')
         .populate('buyer')
         .populate('product')
         .then(orders => {
+            console.log(req.params.status)
+
             res.status(200).send({
                 success: true,
                 orders: orders
