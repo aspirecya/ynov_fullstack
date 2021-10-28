@@ -9,7 +9,8 @@ exports.createPaymentIntent = async (req, res, err) => {
         amount: req.body.price,
         currency: 'eur',
         payment_method_types: [
-            'card'
+            'card',
+            'sepa_debit'
         ],
     });
 
