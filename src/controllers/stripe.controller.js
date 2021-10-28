@@ -3,9 +3,6 @@ const moment = require('moment');
 const jwtConfig = require('../configs/jwt.config');
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
-const endpointSecret = "whsec_98mxyucnBkdMtSW4lvotTIlmNq54xbNI";
-
 exports.createPaymentIntent = async (req, res, err) => {
     const intent = await stripe.paymentIntents.create({
         amount: req.body.price * 100,
