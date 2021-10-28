@@ -4,6 +4,7 @@ const stripe = require('../controllers/stripe.controller');
 const verifyAuth = require('../utils/verifyAuth');
 
 
-router.post('/create-payment-intent', stripe.createPaymentIntent);
+router.post('/stripe/create-payment-intent', stripe.createPaymentIntent);
+router.post('/stripe/webhook', stripe.webhook);
 
 module.exports = router;
