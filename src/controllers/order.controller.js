@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const jwtConfig = require('../configs/jwt.config');
 const Order = require('../models/order.model');
 const moment = require('moment');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 exports.create = async (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
@@ -17,7 +18,7 @@ exports.create = async (req, res, err) => {
 
     order.save()
         .then(order => {
-            order.populate('product', function (err) {
+            order.populate('product', async function (err) {
                 order.price = order.product.price;
                 order.product.isActive = false;
                 order.product.isAwaitingPayment = true;
@@ -28,7 +29,8 @@ exports.create = async (req, res, err) => {
                 res.status(200).send({
                     success: true,
                     message: "The buyer has been confirmed.",
-                    order: order
+                    order: order,
+                    paymentIntent: test,
                 });
             });
         })
