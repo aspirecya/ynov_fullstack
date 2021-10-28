@@ -11,7 +11,7 @@ exports.create = async (req, res, err) => {
         seller: user,
         buyer: req.body.buyer,
         product: req.body.product,
-        status: "En cours",
+        status: "En attente de paiement",
         returnDate: todayDate.add('15', 'd')
     });
 
@@ -20,6 +20,7 @@ exports.create = async (req, res, err) => {
             order.populate('product', function (err) {
                 order.price = order.product.price;
                 order.product.isActive = false;
+                order.product.isAwaitingPayment = true;
 
                 order.product.save();
                 order.save();

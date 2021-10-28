@@ -37,6 +37,11 @@ const productSchema = new Schema({
         required: true,
         default: true,
     },
+    isAwaitingPayment: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     geocoding: {
         latitude: mongoose.Decimal128,
         longitude: mongoose.Decimal128,
