@@ -6,7 +6,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 
 exports.createPaymentIntent = async (req, res, err) => {
     const intent = await stripe.paymentIntents.create({
-        amount: req.body.price,
+        amount: req.body.price * 100,
         currency: 'eur',
         payment_method_types: [
             'card',
