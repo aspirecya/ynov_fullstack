@@ -90,9 +90,9 @@ function handleIntentSuccess(created) {
 
             order.populate('product', async function (err) {
                 order.product.isAwaitingPayment = false;
+                order.product.save();
             })
 
-            order.product.save();
             order.save();
         })
         .catch(err => {
