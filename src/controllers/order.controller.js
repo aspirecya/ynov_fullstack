@@ -2,7 +2,10 @@ const jwt = require('jsonwebtoken');
 const jwtConfig = require('../configs/jwt.config');
 const Order = require('../models/order.model');
 const moment = require('moment');
-const stripe = require('stripe')(process.env.STRIPE_KEY);
+
+const ORDER_AWAITING_PAYMENT = "En attente de paiement";
+const ORDER_SUCCESS = "Paiement terminé";
+const ORDER_CANCELLED = "Paiement annulé";
 
 exports.create = async (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
@@ -12,8 +15,7 @@ exports.create = async (req, res, err) => {
         seller: user,
         buyer: req.body.buyer,
         product: req.body.product,
-        status: "En attente de paiement",
-        returnDate: todayDate.add('15', 'd')
+        status: ORDER_AWAITING_PAYMENT,
     });
 
     order.save()

@@ -1,5 +1,12 @@
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_KEY;
+const Order = require('../models/order.model');
+const moment = require('moment');
+
+const ORDER_AWAITING_PAYMENT = "En attente de paiement";
+const ORDER_PROCESSING = "Paiement en cours";
+const ORDER_SUCCESS = "Paiement terminé";
+const ORDER_CANCELLED = "Paiement annulé";
 
 exports.createPaymentIntent = async (req, res, err) => {
     try {
@@ -44,15 +51,15 @@ exports.webhook = async (req, res, err) => {
     switch (event.type) {
         case 'payment_intent.created':
             const created = event.data.object;
-            console.log('📃 LOG CREATED:', created);
+            handleIntentCreation(created);
             break;
         case 'payment_intent.canceled':
             const cancelled = event.data.object;
-
+            handleIntentCancellation(cancelled);
             break;
         case 'payment_intent.succeeded':
             const succeeded = event.data.object;
-
+            handleIntentSuccess(succeeded);
             break;
         default:
             console.log(`Unhandled event type ${event.type}`);
@@ -60,4 +67,38 @@ exports.webhook = async (req, res, err) => {
 
     // Return a 200 response to acknowledge receipt of the event
     res.send();
+}
+
+function handleIntentCreation(created) {
+    Order.findById(_id = created.metadata.order)
+        .then(order => {
+            order.status = ORDER_PROCESSING;
+        })
+}
+function handleIntentSuccess(created) {
+    Order.findById(_id = created.metadata.order)
+        .then(order => {
+            order.status = ORDER_SUCCESS;
+            order.returnDate = moment().add('15', 'd')
+
+            order.populate('product', async function (err) {
+                order.product.isAwaitingPayment = false;
+            })
+
+            order.product.save();
+            order.save();
+        })
+}
+function handleIntentCancellation(created) {
+    Order.findById(_id = created.metadata.order)
+        .then(order => {
+            order.status = ORDER_CANCELLED;
+
+            order.populate('product', async function (err) {
+                order.product.isAwaitingPayment = false;
+            })
+
+            order.product.save();
+            order.save();
+        })
 }
