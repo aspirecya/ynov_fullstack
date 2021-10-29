@@ -6,7 +6,7 @@ const {Client} = require("@googlemaps/google-maps-services-js");
 exports.create = (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
 
-    if(!user) {
+    if (!user) {
         return res.status(400).send({
             added: false,
             message: "The login token is expired or invalid."
@@ -62,7 +62,7 @@ exports.create = (req, res, err) => {
 };
 
 exports.findAll = (req, res) => {
-    Product.find({ isActive: true })
+    Product.find({isActive: true})
         .populate('category')
         .then(product => {
             res.status(200).send({
@@ -100,7 +100,7 @@ exports.findById = (req, res) => {
 };
 
 exports.findByIdAndUpdate = (req, res) => {
-    Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
         .then(product => {
             res.status(200).send({
                 success: true,
@@ -138,7 +138,7 @@ exports.findByIdAndRemove = (req, res) => {
 exports.getUserProducts = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
 
-    if(!user) {
+    if (!user) {
         return res.status(400).send({
             added: false,
             success: false,
@@ -146,7 +146,7 @@ exports.getUserProducts = (req, res) => {
         })
     }
 
-    Product.find({ seller: user })
+    Product.find({seller: user})
         .then(products => {
             res.send(products);
         })
@@ -168,6 +168,19 @@ exports.getProductBuyers = (req, res) => {
             console.log("[PRODUCT GETPRODUCTBUYERS ERROR]", err);
             res.status(500).send({
                 message: err.message || "An error has occurred while fetching the product's buyers."
+            })
+        })
+}
+
+exports.getBuyerProducts = (req, res) => {
+    Product.find({buyers: [req.params.id]})
+        .then(products => {
+            res.status(200).send(products);
+        })
+        .catch(err => {
+            console.log("[PRODUCT GETBUYERPRODUCTS ERROR]", err);
+            res.status(500).send({
+                message: err.message
             })
         })
 }
