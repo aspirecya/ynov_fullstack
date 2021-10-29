@@ -173,7 +173,15 @@ exports.getProductBuyers = (req, res) => {
 }
 
 exports.getBuyerProducts = (req, res) => {
-    Product.find({buyers: [req.params.id]})
+    let query = {}
+
+    if (req.params.id) {
+        query.buyers = [req.params.id]
+    } else {
+        query.buyers = [jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id];
+    }
+
+    Product.find(query)
         .then(products => {
             res.status(200).send(products);
         })
