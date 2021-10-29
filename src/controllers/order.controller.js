@@ -86,7 +86,7 @@ exports.findById = (req, res) => {
 };
 
 exports.findByIdAndUpdate = (req, res) => {
-    Order.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    Order.findByIdAndUpdate(req.params.id, req.body, {new: true})
         .then(order => {
             res.status(200).send({
                 success: true,
@@ -122,12 +122,16 @@ exports.findByIdAndRemove = (req, res) => {
 };
 
 exports.findBySellerId = (req, res) => {
-    let query = {
-        buyer: req.params.id
+    let query = {}
+
+    if (req.query.id) {
+        query.buyer = req.query.id
+    } else {
+        query.buyer = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
     }
 
-    if(req.params.status) {
-        query.status = req.params.status;
+    if (req.query.status) {
+        query.status = req.query.status;
     }
 
     Order.find(query)
@@ -149,12 +153,16 @@ exports.findBySellerId = (req, res) => {
 };
 
 exports.findByBuyerId = (req, res) => {
-    let query = {
-        buyer: req.params.id
+    let query = {}
+
+    if (req.query.id) {
+        query.buyer = req.query.id
+    } else {
+        query.buyer = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
     }
 
-    if(req.params.status) {
-        query.status = req.params.status;
+    if (req.query.status) {
+        query.status = req.query.status;
     }
 
     Order.find(query)
@@ -162,8 +170,6 @@ exports.findByBuyerId = (req, res) => {
         .populate('buyer')
         .populate('product')
         .then(orders => {
-            console.log(req.params.status)
-
             res.status(200).send({
                 success: true,
                 orders: orders
@@ -178,7 +184,7 @@ exports.findByBuyerId = (req, res) => {
 };
 
 exports.findByProductId = (req, res) => {
-    Order.find({ product: req.params.id })
+    Order.find({product: req.params.id})
         .populate('seller')
         .populate('buyer')
         .populate('product')
