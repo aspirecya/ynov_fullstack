@@ -72,14 +72,21 @@ exports.webhook = async (req, res, err) => {
 function handleIntentCreation(created) {
     Order.findById(_id = created.metadata.order)
         .then(order => {
+            console.log('📃 intent creation order:', order);
+
             order.status = ORDER_PROCESSING;
+        })
+        .catch(err => {
+            console.log("[❌ ERROR INTENT CREATION]", err);
         })
 }
 function handleIntentSuccess(created) {
     Order.findById(_id = created.metadata.order)
         .then(order => {
+            console.log('📃 intent success order:', order);
+
             order.status = ORDER_SUCCESS;
-            order.returnDate = moment().add('15', 'd')
+            order.returnDate = moment().add('15', 'd');
 
             order.populate('product', async function (err) {
                 order.product.isAwaitingPayment = false;
@@ -88,10 +95,15 @@ function handleIntentSuccess(created) {
             order.product.save();
             order.save();
         })
+        .catch(err => {
+            console.log("[❌ ERROR INTENT SUCCESS]", err);
+        })
 }
 function handleIntentCancellation(created) {
     Order.findById(_id = created.metadata.order)
         .then(order => {
+            console.log('📃 intent cancel order:', order);
+
             order.status = ORDER_CANCELLED;
 
             order.populate('product', async function (err) {
@@ -100,5 +112,8 @@ function handleIntentCancellation(created) {
 
             order.product.save();
             order.save();
+        })
+        .catch(err => {
+            console.log("[❌ ERROR INTENT SUCCESS]", err);
         })
 }

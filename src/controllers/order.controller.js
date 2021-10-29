@@ -32,7 +32,6 @@ exports.create = async (req, res, err) => {
                     success: true,
                     message: "The buyer has been confirmed.",
                     order: order,
-                    paymentIntent: test,
                 });
             });
         })
