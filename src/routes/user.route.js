@@ -9,7 +9,7 @@ router.post('/users', user.create);
 router.get('/users', verifyAuth, user.findAll);
 router.get('/user', verifyAuth, user.findByToken);
 router.get('/user/:id', verifyPerm, user.findById);
-router.patch('/user', verifyAuth, user.findByTokenAndUpdate);
+router.patch('/user/:id?', verifyAuth, user.findAndUpdate);
 router.delete('/user/:id', verifyAuth, user.findByIdAndRemove);
 router.get('/user/isAdmin', user.isAdmin);
 

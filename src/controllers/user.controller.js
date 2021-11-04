@@ -73,8 +73,15 @@ exports.findById = (req, res) => {
         })
 };
 
-exports.findByTokenAndUpdate = (req, res) => {
-    let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+exports.findAndUpdate = (req, res) => {
+    let user;
+
+    if (req.params.id) {
+        user = req.params.id
+    } else {
+        user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
+    }
+
     if(req.body.password) req.body.password = bcrypt.hashSync(req.body.password, 8);
 
     User.findByIdAndUpdate(user, req.body, { new: true })
