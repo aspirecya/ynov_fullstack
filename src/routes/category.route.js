@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const category = require('../controllers/category.controller');
-const verifyAuth = require('../utils/verifyAuth');
+const verifyPerm = require('../utils/verifyPerm');
 
 
-router.post('/categories/', category.create);
+router.post('/categories/', verifyPerm, category.create);
 router.get('/categories/', category.findAll);
-router.patch('/category/:id', verifyAuth, category.findByIdAndUpdate);
-router.delete('/category/:id', verifyAuth, category.findByIdAndRemove);
+router.patch('/category/:id', verifyPerm, category.findByIdAndUpdate);
+router.delete('/category/:id', verifyPerm, category.findByIdAndRemove);
 
 module.exports = router;
