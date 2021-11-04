@@ -61,6 +61,18 @@ exports.findByToken = (req, res) => {
         })
 };
 
+exports.findById = (req, res) => {
+    User.findById(_id = req.params.id)
+        .then(user => {
+            res.send(user);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "An error has occurred while fetching the user."
+            })
+        })
+};
+
 exports.findByTokenAndUpdate = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
     if(req.body.password) req.body.password = bcrypt.hashSync(req.body.password, 8);

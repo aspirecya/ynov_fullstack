@@ -2,7 +2,7 @@ const jwtConfig = require('../configs/jwt.config');
 const jwt = require('jsonwebtoken');
 
 
-function verifyAuth(req, res, next) {
+function verifyPerm(req, res, next) {
     let token = req.headers['x-access-token'];
 
     if(!token) {
@@ -24,4 +24,4 @@ function verifyAuth(req, res, next) {
     });
 }
 
-module.exports = verifyAuth;
+module.exports = verifyPerm;
