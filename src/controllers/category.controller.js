@@ -1,5 +1,3 @@
-const jwtConfig = require('../configs/jwt.config');
-const jwt = require('jsonwebtoken');
 const Category = require('../models/category.model');
 
 exports.create = (req, res, err) => {
@@ -44,7 +42,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.findByIdAndUpdate = (req, res) => {
-    Category.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    Category.findByIdAndUpdate(req.params.id, req.body, {new: true})
         .then(category => {
             res.status(200).send({
                 success: true,
