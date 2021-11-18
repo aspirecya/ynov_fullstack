@@ -68,7 +68,7 @@ exports.findAll = (req, res) => {
             res.status(200).send({
                 success: true,
                 message: "Products have been fetched.",
-                product: product
+                product: product.filter(product => product._id !== '6196155aa285525a320eedbb'),
             });
         })
         .catch(err => {
