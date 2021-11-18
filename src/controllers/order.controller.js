@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../configs/jwt.config');
 const Order = require('../models/order.model');
-import {ORDER_AWAITING_PAYMENT} from '../configs/constants.config';
+const {ORDER_AWAITING_PAYMENT} = require("../configs/constants.config");
 
 exports.create = async (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;

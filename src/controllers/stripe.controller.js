@@ -2,7 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_KEY;
 const Order = require('../models/order.model');
 const moment = require('moment');
-import {ORDER_SUCCESS, ORDER_CANCELLED, ORDER_PROCESSING} from '../configs/constants.config';
+const {ORDER_PROCESSING, ORDER_SUCCESS, ORDER_CANCELLED} = require("../configs/constants.config");
 
 exports.createPaymentIntent = async (req, res, err) => {
     try {
