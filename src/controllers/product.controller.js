@@ -183,7 +183,7 @@ exports.getBuyerProducts = (req, res) => {
 
     Product.find(query)
         .then(products => {
-            res.status(200).send(products);
+            res.status(200).send(products.filter(product => product._id != "6196155aa285525a320eedbb"));
         })
         .catch(err => {
             console.log("[PRODUCT GETBUYERPRODUCTS ERROR]", err);
