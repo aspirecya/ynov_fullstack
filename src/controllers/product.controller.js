@@ -64,11 +64,11 @@ exports.create = (req, res, err) => {
 exports.findAll = (req, res) => {
     Product.find({isActive: true})
         .populate('category')
-        .then(product => {
+        .then(products => {
             res.status(200).send({
                 success: true,
                 message: "Products have been fetched.",
-                product: product.filter(product => product._id !== '6196155aa285525a320eedbb'),
+                product: products.filter(product => product._id != "6196155aa285525a320eedbb"),
             });
         })
         .catch(err => {
