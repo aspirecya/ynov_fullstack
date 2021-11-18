@@ -1,15 +1,10 @@
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../configs/jwt.config');
 const Order = require('../models/order.model');
-const moment = require('moment');
-
-const ORDER_AWAITING_PAYMENT = "En attente de paiement";
-const ORDER_SUCCESS = "Paiement terminé";
-const ORDER_CANCELLED = "Paiement annulé";
+import {ORDER_AWAITING_PAYMENT} from '../configs/constants.config';
 
 exports.create = async (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
-    let todayDate = moment();
 
     const order = new Order({
         seller: user,

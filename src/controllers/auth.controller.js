@@ -1,8 +1,8 @@
 const User = require('../models/user.model');
 const userValidationSchema = require("../utils/validators/user.validation");
 const jwtService = require('../services/jwt.service');
+const geocodingService = require('../services/geocoding.service');
 const bcrypt = require('bcrypt');
-const {Client} = require("@googlemaps/google-maps-services-js");
 
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
@@ -24,22 +24,7 @@ exports.register = (req, res, err) => {
     });
 
     if (req.body.address) {
-        const client = new Client({});
-
-        client.geocode({
-            params: {
-                key: process.env.GOOGLE_MAP_KEY,
-                address: req.body.address,
-                region: 'fr',
-            }
-        })
-            .then((r) => {
-                user.geocoding.latitude = r.data.results[0].geometry.location.lat;
-                user.geocoding.longitude = r.data.results[0].geometry.location.lng;
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        geocodingService.geocodeUser(user, req.body.address);
     }
 
     user.save()

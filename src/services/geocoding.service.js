@@ -19,6 +19,25 @@ exports.geocodeUser = (user, address) => {
         });
 }
 
+exports.geocodeProduct = (product, address) => {
+    client.geocode({
+        params: {
+            key: process.env.GOOGLE_MAP_KEY,
+            address: req.body.address,
+            region: 'fr',
+        }
+    })
+        .then((r) => {
+            product.seller.geocoding.latitude = r.data.results[0].geometry.location.lat;
+            product.seller.geocoding.longitude = r.data.results[0].geometry.location.lng;
+            product.save();
+        })
+        .catch((e) => {
+            console.log(e);
+        });
+
+}
+
 exports.geocodeAddress = (address) => {
     client.geocode({
         params: {

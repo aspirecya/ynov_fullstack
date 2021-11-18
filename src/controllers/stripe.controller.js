@@ -2,11 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_KEY);
 const webhookSecret = process.env.STRIPE_WEBHOOK_KEY;
 const Order = require('../models/order.model');
 const moment = require('moment');
-
-const ORDER_AWAITING_PAYMENT = "En attente de paiement";
-const ORDER_PROCESSING = "Paiement en cours";
-const ORDER_SUCCESS = "Paiement terminé";
-const ORDER_CANCELLED = "Paiement annulé";
+import {ORDER_SUCCESS, ORDER_CANCELLED, ORDER_PROCESSING} from '../configs/constants.config';
 
 exports.createPaymentIntent = async (req, res, err) => {
     try {
@@ -26,7 +22,7 @@ exports.createPaymentIntent = async (req, res, err) => {
             success: true,
             clientSecret: intent.client_secret,
         })
-    } catch(err) {
+    } catch (err) {
         console.log('[STRIPE PAYMENT INTENT CREATE]', err);
 
         res.status(400).send({
@@ -78,6 +74,7 @@ function handleIntentCreation(created) {
             console.log("[❌ ERROR INTENT CREATION]", err);
         })
 }
+
 function handleIntentSuccess(created) {
     Order.findById(_id = created.metadata.order)
         .then(order => {
@@ -98,6 +95,7 @@ function handleIntentSuccess(created) {
             console.log("[❌ ERROR INTENT SUCCESS]", err);
         })
 }
+
 function handleIntentCancellation(created) {
     Order.findById(_id = created.metadata.order)
         .then(order => {

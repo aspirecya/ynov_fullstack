@@ -1,7 +1,6 @@
 const jwtConfig = require('../configs/jwt.config');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/product.model');
-const {Client} = require("@googlemaps/google-maps-services-js");
 
 exports.create = (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
@@ -28,23 +27,11 @@ exports.create = (req, res, err) => {
     product.save()
         .populate('seller')
         .then(product => {
-            const client = new Client({});
-
-            client.geocode({
-                params: {
-                    key: process.env.GOOGLE_MAP_KEY,
-                    address: req.body.address,
-                    region: 'fr',
-                }
-            })
-                .then((r) => {
-                    product.seller.geocoding.latitude = r.data.results[0].geometry.location.lat;
-                    product.seller.geocoding.longitude = r.data.results[0].geometry.location.lng;
-                    product.save();
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+            product.geocoding = {
+                latitude: product.seller.geocoding.latitude,
+                longitude: product.seller.geocoding.longitude
+            };
+            product.save();
 
             res.status(200).send({
                 success: true,
