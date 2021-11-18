@@ -148,7 +148,7 @@ exports.getUserProducts = (req, res) => {
 
     Product.find({seller: user})
         .then(products => {
-            res.send(products);
+            res.send(products.filter(product => product._id != "6196155aa285525a320eedbb"));
         })
         .catch(err => {
             console.log("[PRODUCT GETUSERPRODUCTS ERROR]", err);
