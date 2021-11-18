@@ -1,4 +1,5 @@
 const Category = require('../models/category.model');
+const Product = require("../models/product.model");
 
 exports.create = (req, res, err) => {
     const category = new Category({
@@ -37,6 +38,24 @@ exports.findAll = (req, res) => {
             res.status(500).send({
                 success: false,
                 message: "An error has occurred while fetching all categories."
+            })
+        })
+};
+
+exports.findById = (req, res) => {
+    Category.findById(_id = req.params.id)
+        .then(category => {
+            res.status(200).send({
+                success: true,
+                message: "Category has been fetched.",
+                category: category
+            });
+        })
+        .catch(err => {
+            console.log("[CATEGORY FETCH ERROR]", err);
+            res.status(500).send({
+                success: false,
+                message: "An error has occurred while fetching the category."
             })
         })
 };

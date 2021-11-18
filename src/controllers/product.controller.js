@@ -62,15 +62,7 @@ exports.create = (req, res, err) => {
 };
 
 exports.findAll = (req, res) => {
-    let query = {
-        isActive: true,
-    }
-
-    if (req.params.category) {
-        query.category = req.params.category
-    }
-
-    Product.find(query)
+    Product.find({isActive: true})
         .populate('category')
         .then(products => {
             res.status(200).send({
@@ -235,14 +227,14 @@ exports.productHasBuyerId = (req, res) => {
 }
 
 exports.getProductsByCategory = (req, res) => {
-    Product.find(category = req.params.id)
-        .then(product => {
-            res.send(product.buyers.includes(user));
+    Product.find({isActive: true, category: req.params.id})
+        .then(products => {
+            res.send(products.filter(product => product._id != "6196155aa285525a320eedbb"));
         })
         .catch(err => {
             console.log("[PRODUCT getProductsByCategory ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the product's buyers."
+                message: err.message || "An error has occurred while fetching the category's products."
             })
         })
 }

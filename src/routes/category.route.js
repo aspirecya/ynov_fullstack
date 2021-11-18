@@ -6,6 +6,7 @@ const verifyPerm = require('../utils/verifyPerm');
 
 router.post('/categories/', verifyPerm, category.create);
 router.get('/categories/', category.findAll);
+router.get('/category/:id', category.findById);
 router.patch('/category/:id', verifyPerm, category.findByIdAndUpdate);
 router.delete('/category/:id', verifyPerm, category.findByIdAndRemove);
 

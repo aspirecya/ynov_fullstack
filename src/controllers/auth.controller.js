@@ -1,12 +1,8 @@
-const userValidationSchema = require("../utils/validators/user.validation");
 const User = require('../models/user.model');
-
+const userValidationSchema = require("../utils/validators/user.validation");
 const jwtService = require('../services/jwt.service');
-const jwtConfig = require('../configs/jwt.config');
-
 const bcrypt = require('bcrypt');
 const {Client} = require("@googlemaps/google-maps-services-js");
-
 
 exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
