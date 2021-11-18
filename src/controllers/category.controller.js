@@ -61,6 +61,7 @@ exports.findById = (req, res) => {
 };
 
 exports.findByIdAndUpdate = (req, res) => {
+    console.log("DEBUG REGIS ❌:", req.params, req.body);
     Category.findByIdAndUpdate(req.params.id, req.body, {new: true})
         .then(category => {
             res.status(200).send({
