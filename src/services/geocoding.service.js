@@ -10,8 +10,10 @@ exports.geocodeUser = (user, address) => {
         }
     })
         .then((r) => {
-            user.geocoding.latitude = r.data.results[0].geometry.location.lat;
-            user.geocoding.longitude = r.data.results[0].geometry.location.lng;
+            user.geocoding = {
+                latitude: r.data.results[0].geometry.location.lat,
+                longitude: r.data.results[0].geometry.location.lng
+            }
             user.save();
         })
         .catch((e) => {
@@ -28,8 +30,10 @@ exports.geocodeProduct = (product, address) => {
         }
     })
         .then((r) => {
-            product.seller.geocoding.latitude = r.data.results[0].geometry.location.lat;
-            product.seller.geocoding.longitude = r.data.results[0].geometry.location.lng;
+            product.geocoding = {
+                latitude: r.data.results[0].geometry.location.lat,
+                longitude: r.data.results[0].geometry.location.lng
+            }
             product.save();
         })
         .catch((e) => {
