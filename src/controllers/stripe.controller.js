@@ -5,12 +5,7 @@ const moment = require('moment');
 const {ORDER_PROCESSING, ORDER_SUCCESS, ORDER_CANCELLED} = require("../configs/constants.config");
 
 exports.createPaymentIntent = async (req, res, err) => {
-    res.send({
-        message: "hi",
-    });
-    console.log("📄 LOGGING INTENT START 📄");
     try {
-        console.log("📄 LOGGING INTENT BODY 📄", req.body)
         const intent = await stripe.paymentIntents.create({
             amount: req.body.price * 100,
             currency: 'eur',
@@ -22,8 +17,6 @@ exports.createPaymentIntent = async (req, res, err) => {
                 order: req.body.order,
             }
         });
-        console.log("📄 LOGGING INTENT INTENT 📄", intent)
-
 
         res.status(200).send({
             success: true,
@@ -36,7 +29,6 @@ exports.createPaymentIntent = async (req, res, err) => {
             success: false,
         })
     }
-    console.log("📄 LOGGING INTENT END 📄");
 };
 
 exports.webhook = async (req, res, err) => {
