@@ -25,7 +25,7 @@ exports.geocodeProduct = (product, address) => {
     client.geocode({
         params: {
             key: process.env.GOOGLE_MAP_KEY,
-            address: req.body.address,
+            address: address,
             region: 'fr',
         }
     })
