@@ -5,6 +5,9 @@ const moment = require('moment');
 const {ORDER_PROCESSING, ORDER_SUCCESS, ORDER_CANCELLED} = require("../configs/constants.config");
 
 exports.createPaymentIntent = async (req, res, err) => {
+    res.send({
+        message: "hi",
+    });
     console.log("📄 LOGGING INTENT START 📄");
     try {
         console.log("📄 LOGGING INTENT BODY 📄", req.body)
