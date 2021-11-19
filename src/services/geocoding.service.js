@@ -38,6 +38,16 @@ exports.geocodeProduct = (product, address) => {
 
 }
 
+exports.geocodeProductFromSeller = (product) => {
+    console.log(product);
+    product.geocoding = {
+        latitude: product.seller.geocoding.latitude,
+        longitude: product.seller.geocoding.longitude
+    };
+    console.log(product);
+    product.save();
+}
+
 exports.geocodeAddress = (address) => {
     client.geocode({
         params: {

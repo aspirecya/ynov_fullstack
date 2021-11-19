@@ -1,6 +1,7 @@
 const jwtConfig = require('../configs/jwt.config');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/product.model');
+const {geocodeProductFromSeller} = require("../services/geocoding.service");
 
 exports.create = (req, res, err) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
@@ -25,13 +26,10 @@ exports.create = (req, res, err) => {
     });
 
     product.save()
-        .populate('seller')
         .then(product => {
-            product.geocoding = {
-                latitude: product.seller.geocoding.latitude,
-                longitude: product.seller.geocoding.longitude
-            };
-            product.save();
+            Product.populate(product, {path: "seller"}, function (err, prod) {
+                geocodeProductFromSeller(prod);
+            });
 
             res.status(200).send({
                 success: true,
