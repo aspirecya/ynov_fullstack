@@ -186,7 +186,10 @@ exports.addBuyerToProduct = (req, res) => {
             product.buyers.push(user);
             product.save();
 
-            res.send(product);
+            res.status(200).send({
+                success: true,
+                message: "You shown your interest to the seller for the product.",
+            });
         })
         .catch(err => {
             console.log("[PRODUCT ADDBUYERTOPRODUCT ERROR]", err);
