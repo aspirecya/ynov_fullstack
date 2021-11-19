@@ -115,7 +115,7 @@ exports.findByIdAndRemove = (req, res) => {
 
 exports.isAdmin = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
-
+    
     User.findById(user)
         .then(user => {
             res.status(200).send(user.admin);

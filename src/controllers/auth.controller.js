@@ -8,14 +8,14 @@ exports.register = (req, res, err) => {
     const validation = userValidationSchema.validate(req.body);
 
     if (validation.error) {
-        return res.status(400).send(validation.error);
+        return res.status(400).send({
+            message: "The data you entered are incorrect, please try again."
+        });
     }
-
-    let hashedPassword = bcrypt.hashSync(req.body.password, 8);
 
     const user = new User({
         email: req.body.email,
-        password: hashedPassword,
+        password: bcrypt.hashSync(req.body.password, 8),
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         address: req.body.address,
