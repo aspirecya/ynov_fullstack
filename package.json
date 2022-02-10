@@ -7,7 +7,7 @@
     "dev": "nodemon --exec babel-node ./src/server.js",
     "build": "babel -d ./build ./src",
     "start": "node ./build/server.js",
-    "test": "jest --silent=false"
+    "test": "jest --watchAll --verbose"
   },
   "keywords": [],
   "author": "",
