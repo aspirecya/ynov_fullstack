@@ -1,5 +1,4 @@
 # ynov-eshop back end - Wassim MATOUGUI
-#https://ynov-eshop.herokuapp.com/
 
 ## Build Setup
 
