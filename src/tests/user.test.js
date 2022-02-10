@@ -1,6 +1,8 @@
 const axios = require('axios');
 
 describe('user tests suite', () => {
+    let token = "";
+
     beforeAll(async () => {
         const response = await axios({
             url: 'http://localhost:3030/api/v1/auth/login',
@@ -10,14 +12,19 @@ describe('user tests suite', () => {
                 "password": "test"
             }
         });
-        console.log(response);
+
+        token = response.data.token;
     });
 
-    // it('tests user fetch', async () => {
-    //     const response = await axios({
-    //         url: 'http://localhost:3030/api/v1/users',
-    //         method: 'GET',
-    //
-    //     })
-    // });
+    it('tests user fetch', async () => {
+        const response = await axios({
+            url: 'http://localhost:3030/api/v1/users',
+            method: 'GET',
+            headers: {
+                'x-access-token': token,
+            }
+        })
+        
+        expect(response.status).toBe(200);
+    });
 });
