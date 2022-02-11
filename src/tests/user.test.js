@@ -67,7 +67,7 @@ describe('user tests suite', () => {
         expect(response.data).toEqual(expect.any(Object));
     });
 
-    it("tests user fetching", async () => {
+    it("tests fetching user by id", async () => {
         const response = await axios({
             url: `http://localhost:3030/api/v1/user/${_testUserId}`,
             method: 'GET',
@@ -82,13 +82,62 @@ describe('user tests suite', () => {
         expect(response.data.lastname).toEqual(testingAccount.lastname);
     });
 
-    afterAll(async () => {
-        await axios({
+    it("tests fetching user by token", async () => {
+        const response = await axios({
+            url: "http://localhost:3030/api/v1/user/",
+            method: 'GET',
+            headers: {
+                'x-access-token': token,
+            }
+        });
+
+        expect(response.status).toBe(200);
+        expect(response.data).toEqual(expect.any(Object));
+    });
+
+    it("tests user updating", async () => {
+        let newFirstName = "cba";
+
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/user/${_testUserId}`,
+            method: 'PATCH',
+            headers: {
+                'x-access-token': token,
+            },
+            data: {
+                "firstname": newFirstName
+            }
+        });
+
+        expect(response.status).toBe(200);
+        expect(response.data.message).toBe("Account has been updated.");
+        expect(response.data.success).toBeTruthy();
+        expect(response.data.user.firstname).toEqual(newFirstName);
+    });
+
+    it("tests user is admin", async () => {
+        const response = await axios({
+            url: "http://localhost:3030/api/v1/user/isAdmin",
+            method: 'GET',
+            headers: {
+                'x-access-token': token,
+            }
+        });
+
+        expect(response.status).toBe(200);
+        expect(response.data).toBeTruthy();
+    });
+
+    it("tests user deletion", async () => {
+        const response = await axios({
             url: `http://localhost:3030/api/v1/user/${_testUserId}`,
             method: 'DELETE',
             headers: {
                 'x-access-token': token,
             }
         });
+
+        expect(response.status).toBe(200);
+        expect(response.data).toEqual(expect.any(Object));
     });
 });
