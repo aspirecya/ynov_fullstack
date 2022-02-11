@@ -22,9 +22,11 @@ const userSchema = new Schema({
         },
         phone: {
             type: String,
+            required: false
         },
         address: {
             type: String,
+            required: false
         },
         admin: {
             type: Boolean
@@ -38,7 +40,7 @@ const userSchema = new Schema({
         },
     },
 
-    { timestamps: true }
+    {timestamps: true}
 );
 
 module.exports = mongoose.model('User', userSchema);

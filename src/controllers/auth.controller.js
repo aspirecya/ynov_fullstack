@@ -38,10 +38,17 @@ exports.register = (req, res, err) => {
             });
         })
         .catch(err => {
+            let messageString = "";
+            if (err.code === 11000) {
+                messageString = "The entered email is already registered."
+            } else {
+                messageString = "The information entered are incorrect."
+            }
+
             console.log("[AUTH REGISTER ERROR]", err);
             res.status(500).send({
                 success: false,
-                message: "The information entered are incorrect."
+                message: messageString
             })
         })
 };

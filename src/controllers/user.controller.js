@@ -27,8 +27,15 @@ exports.create = (req, res, err) => {
             res.send(data);
         })
         .catch(err => {
+            let messageString = "";
+            if (err.code === 11000) {
+                messageString = "The entered email is already registered."
+            } else {
+                messageString = "The information entered are incorrect."
+            }
+
             res.status(500).send({
-                message: err.message
+                message: messageString
             })
         })
 };
@@ -115,7 +122,7 @@ exports.findByIdAndRemove = (req, res) => {
 
 exports.isAdmin = (req, res) => {
     let user = jwt.verify(req.headers['x-access-token'], jwtConfig.secret).id;
-    
+
     User.findById(user)
         .then(user => {
             res.status(200).send(user.admin);
