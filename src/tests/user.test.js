@@ -75,7 +75,7 @@ describe('user tests suite', () => {
                 'x-access-token': token,
             }
         });
-        
+
         expect(response.status).toBe(200);
         expect(response.data.email).toEqual(testingAccount.email);
         expect(response.data.firstname).toEqual(testingAccount.firstname);
