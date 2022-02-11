@@ -106,7 +106,7 @@ describe("Product tests ", () => {
   it("findByIdAndUpdate product", async () => {
     const response = await axios({
       url: `http://localhost:3030/api/v1/product/${productID}`,
-      method: "GET",
+      method: "PATCH",
       headers: {
         "x-access-token": token,
       },
