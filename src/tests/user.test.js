@@ -24,7 +24,7 @@ describe('user tests suite', () => {
                 'x-access-token': token,
             }
         })
-        
+      
         expect(response.status).toBe(200);
     });
 });
