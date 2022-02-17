@@ -14,7 +14,7 @@ describe('user tests suite', () => {
 
 
     beforeAll(async () => {
-        const response = await axios({
+        const loginResponse = await axios({
             url: 'http://localhost:3030/api/v1/auth/login',
             method: 'POST',
             data: {
@@ -23,7 +23,7 @@ describe('user tests suite', () => {
             }
         });
 
-        token = response.data.token;
+        token = loginResponse.data.token;
     });
 
     it('tests user fetch', async () => {

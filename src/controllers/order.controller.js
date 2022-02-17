@@ -48,7 +48,7 @@ exports.findAll = (req, res) => {
             res.status(200).send({
                 success: true,
                 message: "Orders have been fetched.",
-                order: order
+                orders: order
             });
         })
         .catch(err => {
