@@ -26,6 +26,33 @@ describe('user tests suite', () => {
         token = loginResponse.data.token;
     });
 
+    it('[FAILING] tests without token in', async () => {
+        const response = await axios({
+            url: 'http://localhost:3030/api/v1/users',
+            method: 'GET',
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(400);
+                expect(err.response.data.auth).toBeFalsy();
+                expect(err.response.data.message).toBe("The request has not been applied because the authentication token is missing.")
+            });
+    });
+
+    it('[FAILING] tests with bad token', async () => {
+        const response = await axios({
+            url: 'http://localhost:3030/api/v1/users',
+            method: 'GET',
+            headers: {
+                'x-access-token': "fake",
+            }
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(401);
+                expect(err.response.data.auth).toBeFalsy();
+                expect(err.response.data.message).toBe("The request has not been applied because it lacks valid authentication credentials for the target resource.")
+            });
+    });
+
     it('tests user fetch', async () => {
         const response = await axios({
             url: 'http://localhost:3030/api/v1/users',
@@ -51,6 +78,7 @@ describe('user tests suite', () => {
             }
         })
             .catch((err) => {
+                expect(err.response.data.message).toBe("The entered email is already registered.");
                 expect(err.response.status).toBe(500);
             });
     });
@@ -82,6 +110,20 @@ describe('user tests suite', () => {
         expect(response.data.lastname).toEqual(testingAccount.lastname);
     });
 
+    it("tests fetching[FAILING]  user by id", async () => {
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/user/fakeid`,
+            method: 'GET',
+            headers: {
+                'x-access-token': token,
+            }
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.message).toBe("An error has occurred while fetching the user.");
+            });
+    });
+
     it("tests fetching user by token", async () => {
         const response = await axios({
             url: "http://localhost:3030/api/v1/user/",
@@ -93,6 +135,25 @@ describe('user tests suite', () => {
 
         expect(response.status).toBe(200);
         expect(response.data).toEqual(expect.any(Object));
+    });
+
+    it("[FAILING] tests user updating", async () => {
+        let newFirstName = "cba";
+
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/user/fakeid`,
+            method: 'PATCH',
+            headers: {
+                'x-access-token': token,
+            },
+            data: {
+                "firstname": newFirstName
+            }
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.message).toBe("An error has occurred while updating the user.");
+            });
     });
 
     it("tests user updating", async () => {

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon --exec babel-node ./src/server.js",
     "build": "babel -d ./build ./src",
-    "start": "node ./build/server.js",
+    "start": "node ./src/server.js",
     "test": "jest --watchAll --verbose"
   },
   "keywords": [],

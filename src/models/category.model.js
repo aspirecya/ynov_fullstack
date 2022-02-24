@@ -4,12 +4,13 @@ const Schema = mongoose.Schema;
 const categorySchema = new Schema({
         name: {
             type: String,
+            required: true
         },
         image: {
             type: String,
         },
     },
-    { timestamps: true }
+    {timestamps: true}
 );
 
 module.exports = mongoose.model('Category', categorySchema);

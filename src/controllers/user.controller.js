@@ -103,7 +103,7 @@ exports.findAndUpdate = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message || "An error has occurred while updating the user."
+                message: "An error has occurred while updating the user."
             })
         })
 };

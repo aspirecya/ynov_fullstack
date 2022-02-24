@@ -222,7 +222,7 @@ exports.getProductsByCategory = (req, res) => {
         .catch(err => {
             console.log("[PRODUCT getProductsByCategory ERROR]", err);
             res.status(500).send({
-                message: err.message || "An error has occurred while fetching the category's products."
+                message: "An error has occurred while fetching the category's products."
             })
         })
 }

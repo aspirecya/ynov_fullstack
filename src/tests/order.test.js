@@ -49,6 +49,33 @@ describe('user tests suite', () => {
         };
     });
 
+    it('tests failure without token in', async () => {
+        const response = await axios({
+            url: 'http://localhost:3030/api/v1/orders',
+            method: 'GET',
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(400);
+                expect(err.response.data.auth).toBeFalsy();
+                expect(err.response.data.message).toBe("The request has not been applied because the authentication token is missing.")
+            });
+    });
+
+    it('tests failure with bad token', async () => {
+        const response = await axios({
+            url: 'http://localhost:3030/api/v1/orders',
+            method: 'GET',
+            headers: {
+                'x-access-token': "fake",
+            }
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(401);
+                expect(err.response.data.auth).toBeFalsy();
+                expect(err.response.data.message).toBe("The request has not been applied because it lacks valid authentication credentials for the target resource.")
+            });
+    });
+
     it('tests order fetching', async () => {
         const response = await axios({
             url: 'http://localhost:3030/api/v1/orders',
@@ -95,6 +122,22 @@ describe('user tests suite', () => {
         expect(response.data.order).toEqual(expect.any(Object));
     });
 
+    it('[FAILING] tests order fetching by id', async () => {
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/order/fakeid`,
+            method: 'GET',
+            headers: {
+                'x-access-token': userInfo.token,
+            },
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.success).toBeFalsy();
+                expect(err.response.data.message).toBe("An error has occurred while fetching the order.");
+
+            });
+    });
+
     it('tests order fetching by seller/buyer id', async () => {
         const response = await axios({
             url: 'http://localhost:3030/api/v1/orders/seller/',
@@ -125,6 +168,20 @@ describe('user tests suite', () => {
         expect(response.data.order.length).toBeGreaterThanOrEqual(1);
     });
 
+    it('[FAILING] tests order fetching by product id', async () => {
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/order/product/fakeid`,
+            method: 'GET',
+            headers: {
+                'x-access-token': userInfo.token,
+            },
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.success).toBeFalsy();
+            });
+    });
+
     it('tests order updating', async () => {
         const response = await axios({
             url: `http://localhost:3030/api/v1/order/${productId}`,
@@ -136,11 +193,29 @@ describe('user tests suite', () => {
                 status: ORDER_SUCCESS
             }
         });
-        
+
         expect(response.status).toBe(200);
         expect(response.data.success).toBeTruthy();
         expect(response.data.order).toEqual(expect.any(Object));
         // expect(response.data.order.status).toBe(ORDER_SUCCESS);
+    });
+
+    it('[FAILING] tests order updating', async () => {
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/order/fakeid`,
+            method: 'PATCH',
+            headers: {
+                'x-access-token': userInfo.token,
+            },
+            data: {
+                status: ORDER_SUCCESS
+            }
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.message).toBe("An error has occurred while updating the order.");
+                expect(err.response.data.success).toBeFalsy();
+            });
     });
 
     it('tests order deletion', async () => {
@@ -156,6 +231,21 @@ describe('user tests suite', () => {
         expect(response.data.success).toBeTruthy();
         expect(response.data.order).toEqual(expect.any(Object));
         expect(response.data.message).toBe("Order has been deleted.");
+    });
+
+    it('[FAILING] tests order deletion', async () => {
+        const response = await axios({
+            url: `http://localhost:3030/api/v1/order/fakeid`,
+            method: "DELETE",
+            headers: {
+                "x-access-token": userInfo.token,
+            },
+        })
+            .catch((err) => {
+                expect(err.response.status).toBe(500);
+                expect(err.response.data.message).toBe("An error has occurred while deleting the order.");
+                expect(err.response.data.success).toBeFalsy();
+            });
     });
 
     afterAll(async () => {
